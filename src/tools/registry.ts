@@ -1,19 +1,20 @@
-import {Tool} from "./types.js"
+import { Tool } from "./types.js";
 
-export class ToolRegistry{
-    private tools = new Map<string, Tool>();
+export class ToolRegistry {
+  private tools = new Map<string, Tool>();
 
-    register(tool: Tool): void{
-        /* store in map, throw on duplicate */
+  register(tool: Tool): void {
+    if (this.tools.has(tool.name)) {
+      throw new Error(`Tool with name '${tool.name}' is already registered.`);
     }
-
-   list(): Tool[] {
-    /* return Array.from(this.tools.values()) */
-    return [];
+    this.tools.set(tool.name, tool);
   }
-  get(name: string): Tool | undefined {
-    /* return this.tools.get(name) */
 
-    return;
+  list(): Tool[] {
+    return Array.from(this.tools.values());
+  }
+
+  get(name: string): Tool | undefined {
+    return this.tools.get(name);
   }
 }
