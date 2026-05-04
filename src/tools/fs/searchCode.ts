@@ -12,10 +12,14 @@ function isTextFile(filename: string): boolean {
 
 export const searchCodeTool: Tool = {
   name: "search_code",
-  description: "Searches for a keyword in text files (relative to project root)",
+  description:
+    "Searches for a keyword in text files (relative to project root)",
   inputSchema: z.object({
     keyword: z.string().describe("Text to search for in file contents"),
-    path: z.string().optional().describe("Subdirectory to scope the search (default: project root)"),
+    path: z
+      .string()
+      .optional()
+      .describe("Subdirectory to scope the search (default: project root)"),
   }),
   async execute(input) {
     const relPath = input.path || ".";
