@@ -7,6 +7,9 @@ import {
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ToolRegistry } from "./tools/registry.js";
 import { pingTool } from "./tools/ping.js";
+import { listFilesTool } from "./tools/fs/listFiles.js";
+import { readFileTool } from "./tools/fs/readFile.js";
+import { searchCodeTool } from "./tools/fs/searchCode.js";
 
 const server = new Server(
   { name: "dev-assist-mcp", version: "1.0.0" },
@@ -15,6 +18,9 @@ const server = new Server(
 
 const registry = new ToolRegistry();
 registry.register(pingTool);
+registry.register(listFilesTool);
+registry.register(readFileTool);
+registry.register(searchCodeTool);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
