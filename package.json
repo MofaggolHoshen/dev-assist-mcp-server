@@ -1,8 +1,8 @@
 {
-  "name": "@MofaggolHoshen/dev-assist-mcp-server",
+  "name": "@mofaggolhoshen/dev-assist-mcp-server",
   "version": "1.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "doc": "docs"
   },
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/MofaggolHoshen/dev-assist-mcp-server#readme",
   "type": "module",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
