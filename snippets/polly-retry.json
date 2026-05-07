@@ -1,0 +1,7 @@
+{
+  "name": "polly-retry",
+  "title": "Polly Retry Policy (.NET)",
+  "language": "csharp",
+  "description": "Configures an HTTP retry policy with exponential backoff using Polly.",
+  "code": "builder.Services.AddHttpClient(\"MyClient\")\n  .AddTransientHttpErrorPolicy(p =>\n    p.WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt))));"
+}

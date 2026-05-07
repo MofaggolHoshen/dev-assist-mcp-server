@@ -1,0 +1,7 @@
+{
+  "name": "efcore-repository",
+  "title": "EF Core Repository Pattern",
+  "language": "csharp",
+  "description": "Simple EF Core repository with asynchronous read/write operations.",
+  "code": "public sealed class ProductRepository(AppDbContext db)\n{\n    public Task<Product?> GetByIdAsync(Guid id, CancellationToken ct = default) =>\n        db.Products.FirstOrDefaultAsync(p => p.Id == id, ct);\n\n    public async Task AddAsync(Product entity, CancellationToken ct = default)\n    {\n        await db.Products.AddAsync(entity, ct);\n        await db.SaveChangesAsync(ct);\n    }\n}"
+}
