@@ -1,0 +1,8 @@
+src/
+tests/
+docs/
+*.ts
+!dist/**
+tsconfig*.json
+jest.config.ts
+*.tgz
