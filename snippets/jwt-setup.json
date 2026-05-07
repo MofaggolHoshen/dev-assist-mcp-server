@@ -1,0 +1,7 @@
+{
+  "name": "jwt-setup",
+  "title": "JWT Authentication Setup (ASP.NET Core)",
+  "language": "csharp",
+  "description": "Configures JWT bearer authentication with token validation parameters.",
+  "code": "builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)\n    .AddJwtBearer(options =>\n    {\n        options.TokenValidationParameters = new TokenValidationParameters\n        {\n            ValidateIssuer = true,\n            ValidateAudience = true,\n            ValidateIssuerSigningKey = true,\n            ValidIssuer = config[\"Jwt:Issuer\"],\n            ValidAudience = config[\"Jwt:Audience\"],\n            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config[\"Jwt:Key\"]!))\n        };\n    });"
+}
