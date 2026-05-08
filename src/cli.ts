@@ -26,7 +26,18 @@ Options:
   -v, --version Show package version
 
 Description:
-  Starts the DevAssist MCP server over stdio for MCP clients.`);
+  Starts the DevAssist MCP server over stdio for MCP clients.
+
+VS Code MCP setup:
+{
+  "servers": {
+    "dev-assist": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mofaggolhoshen/dev-assist-mcp-server"]
+    }
+  }
+}`);
   process.exit(0);
 }
 

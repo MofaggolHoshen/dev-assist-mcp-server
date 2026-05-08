@@ -6,6 +6,9 @@ Keep package.json without publishConfig, or keep npmjs as default.
 Publish to each registry explicitly with command-level registry override.
 Use this workflow:
 
+npm run build
+npm publish
+
 Publish to npmjs:
 npm publish --access public --registry=https://registry.npmjs.org
 
