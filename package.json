@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
+  "bin": {
+    "dev-assist-mcp-server": "dist/cli.js"
+  },
   "directories": {
     "doc": "docs"
   },
