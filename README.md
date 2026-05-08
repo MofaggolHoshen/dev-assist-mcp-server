@@ -30,7 +30,9 @@ npm run dev
 
 ## VS Code MCP Configuration
 
-This repository includes `.vscode/mcp.json`:
+You can run the MCP server in VS Code either from this repository or from the published npm package.
+
+Local workspace setup:
 
 ```json
 {
@@ -46,6 +48,22 @@ This repository includes `.vscode/mcp.json`:
 ```
 
 Build once with `npm run build`, then VS Code can launch the server through stdio.
+
+Published npm package setup:
+
+```json
+{
+  "servers": {
+    "dev-assist": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mofaggolhoshen/dev-assist-mcp-server"]
+    }
+  }
+}
+```
+
+This package-based setup is useful when you do not want to build the server from source inside each workspace.
 
 ## Tool Catalog
 
