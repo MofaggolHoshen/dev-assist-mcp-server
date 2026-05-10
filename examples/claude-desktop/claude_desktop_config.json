@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dev-assist-mcp": {
+      "command": "npx",
+      "args": ["@mofaggolhoshen/dev-assist-mcp"]
+    }
+  }
+}

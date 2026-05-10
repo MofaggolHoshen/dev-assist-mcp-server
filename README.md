@@ -1,55 +1,64 @@
-# DevAssist MCP Server
+# DevAssist MCP
 
-stdio-based MCP server in TypeScript that exposes project file access, reusable snippets, and lightweight project analysis tools for AI clients.
+Production-ready developer assistance through Model Context Protocol (MCP).
 
-## Quick Start
+DevAssist MCP is an AI-first developer knowledge server that provides curated snippets, setup guides, architecture templates, concept explanations, and project analysis for modern engineering workflows.
 
-1. Install dependencies:
+## Why DevAssist MCP
+
+AI-generated code is often incomplete, outdated, or missing production context. DevAssist MCP improves output quality by returning structured, version-aware, reusable engineering knowledge instead of generic examples.
+
+## Key Capabilities
+
+- MCP-compatible stdio server
+- Production-ready, curated engineering content
+- Framework and version-aware retrieval
+- Deterministic ranking with confidence signals
+- Explain mode for engineering concepts
+- Setup generation for common backend scenarios
+- Template retrieval for architecture starters
+- File-system and project analysis utility tools
+- Structured responses optimized for AI clients
+
+## Supported Domains
+
+- Authentication: JWT, JWE, role-based authorization, refresh-token rotation
+- Resilience: retry, timeout, circuit breaker, fallback, bulkhead
+- Observability: Serilog, OpenTelemetry tracing, structured logging
+- Architecture: Clean Architecture, CQRS, DDD, repository patterns
+- Messaging: MassTransit, RabbitMQ, outbox, saga state machine
+- Caching: Redis distributed cache, cache-aside
+
+## Installation
+
+### npm
 
 ```bash
-npm install
+npm install @mofaggolhoshen/dev-assist-mcp
 ```
 
-1. Build the server:
+### Run with npx
 
 ```bash
-npm run build
+npx -y @mofaggolhoshen/dev-assist-mcp
 ```
 
-1. Run locally (compiled):
+## MCP Client Integration
 
-```bash
-npm start
-```
-
-1. Or run in development mode:
-
-```bash
-npm run dev
-```
-
-## VS Code MCP Configuration
-
-You can run the MCP server in VS Code either from this repository or from the published npm package.
-
-Local workspace setup:
+### Claude Desktop
 
 ```json
 {
-  "servers": {
-    "dev-assist": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["dist/index.js"],
-      "cwd": "${workspaceFolder}"
+  "mcpServers": {
+    "dev-assist-mcp": {
+      "command": "npx",
+      "args": ["-y", "@mofaggolhoshen/dev-assist-mcp"]
     }
   }
 }
 ```
 
-Build once with `npm run build`, then VS Code can launch the server through stdio.
-
-Published npm package setup:
+### VS Code MCP
 
 ```json
 {
@@ -63,47 +72,181 @@ Published npm package setup:
 }
 ```
 
-This package-based setup is useful when you do not want to build the server from source inside each workspace.
+## MCP Tools
 
-## Tool Catalog
+### Knowledge Tools (PRD-aligned)
 
-| Tool | Description | Input |
-| --- | --- | --- |
-| `ping` | Returns pong to verify the server is reachable | `{}` |
-| `list_files` | Lists files recursively under a directory | `{ path?: string }` |
-| `read_file` | Reads a text file from the workspace | `{ path: string }` |
-| `search_code` | Keyword search across text-like files | `{ keyword: string, path?: string }` |
-| `get_snippet` | Returns a named snippet from `snippets/` | `{ name: string }` |
-| `analyze_project` | Detects language/framework/architecture hints | `{ path?: string }` |
+| Tool | Purpose |
+|---|---|
+| search_snippet | Search reusable engineering snippets with optional filters |
+| get_snippet | Retrieve a detailed snippet by name |
+| get_template | Return complete implementation templates |
+| explain_concept | Explain engineering concepts with practical guidance |
+| generate_setup | Generate production-ready setup guidance |
 
-## Adding Custom Tools
+### Utility Tools
 
-1. Create a new tool module under `src/tools/...` implementing the `Tool` interface from `src/tools/types.ts`.
-2. Define `name`, `description`, `inputSchema` (Zod), and `execute`.
-3. Register the tool in `src/index.ts` using `registry.register(yourTool)`.
-4. Rebuild with `npm run build`.
+| Tool | Purpose |
+|---|---|
+| list_files | List files under a project path |
+| read_file | Read a text file from project scope |
+| search_code | Search keyword matches in project text files |
+| analyze_project | Detect language, framework, architecture, and container hints |
 
-## Snippet Authoring
+## Example Prompts
 
-Add JSON files under `snippets/` using this schema:
+- Give me JWT authentication setup for ASP.NET 9
+- Show Polly retry with exponential backoff
+- Explain circuit breaker pattern
+- Get clean architecture template
+- Analyze this repository structure
+
+## Example Structured Response
 
 ```json
 {
-  "name": "snippet-name",
-  "title": "Human Friendly Title",
-  "language": "csharp",
-  "description": "What this snippet does",
-  "code": "...source code...",
-  "category": "auth",
-  "tags": ["jwt", "security"],
-  "framework": "aspnet",
-  "version": ".net8+",
-  "difficulty": "medium",
-  "bestPractices": ["Validate issuer and audience"],
-  "pitfalls": ["Do not hardcode secrets"],
-  "securityNotes": ["Use HTTPS for bearer tokens"]
+  "query": "jwt authentication asp.net 9",
+  "filters": {
+    "framework": ".net",
+    "version": "9",
+    "category": "auth",
+    "difficulty": "medium",
+    "limit": 10
+  },
+  "total": 1,
+  "results": [
+    {
+      "id": "jwt-setup-dotnet9",
+      "title": "JWT Authentication ASP.NET 9",
+      "framework": ".net",
+      "version": "9",
+      "difficulty": "medium",
+      "confidence": "high",
+      "reasons": ["framework-match", "version-match", "tag-match"]
+    }
+  ]
 }
 ```
 
-The `name` must match `[A-Za-z0-9-]+` because it maps to `snippets/{name}.json`.
-Only `name`, `title`, `language`, `description`, and `code` are required. The rest are strongly recommended for production-ready outputs.
+## Architecture (MVP)
+
+```txt
+AI Client (Copilot / Cursor / Claude)
+            |
+            v
+DevAssist MCP Server (TypeScript MCP SDK)
+            |
+            v
+Catalog + Ranking + Validation Layers
+            |
+            v
+Markdown Knowledge Store (snippets, templates, concepts, setups)
+```
+
+## Repository Layout
+
+```txt
+src/
+  tools/
+  storage/
+  ranking/
+  catalog/
+  content/
+snippets/
+content/
+  concepts/
+  templates/
+  setups/
+examples/
+docs/
+tests/
+```
+
+## Development
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run in development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Run tests
+
+```bash
+npm run test
+```
+
+## Content Authoring Format
+
+Knowledge content uses Markdown with YAML frontmatter.
+
+### Snippet frontmatter example
+
+```yaml
+---
+id: jwt-setup-dotnet9
+name: jwt-setup-dotnet9
+title: JWT Authentication ASP.NET 9
+summary: Production-ready JWT authentication setup for ASP.NET 9 APIs
+framework: aspnet
+version: .net9
+language: csharp
+category: auth
+tags:
+  - jwt
+  - authentication
+  - bearer
+difficulty: medium
+bestPractices:
+  - Use short-lived access tokens
+pitfalls:
+  - Do not hardcode signing keys
+securityNotes:
+  - Store secrets in a secure secret manager
+updatedAt: 2026-05-10
+---
+```
+
+## Non-Functional Targets
+
+- Snippet search target: under 500ms
+- MCP response target: under 1 second
+- Startup target: under 5 seconds
+
+## Roadmap Status
+
+- Phase 1 Foundation Hardening: Completed
+- Phase 2 PRD MVP Delivery: Completed
+- Phase 3 Relevance and Intelligence: Completed
+- Phase 4 Semantic Search and Platform Expansion: Not Started
+
+## Contributing
+
+Contributions are welcome through pull requests and issues.
+
+## License
+
+ISC
+
+## Author
+
+Mofaggol Hoshen
+
+## Links
+
+- Repository: https://github.com/MofaggolHoshen/dev-assist-mcp-server
+- Package: https://www.npmjs.com/package/@mofaggolhoshen/dev-assist-mcp
+- Product Requirements: docs/PRD-v2.md
+- Implementation Plan: docs/Implementation-Plan.md
