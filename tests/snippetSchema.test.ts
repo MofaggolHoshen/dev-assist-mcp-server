@@ -1,44 +1,54 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { snippetSchema } from "../src/content/snippetSchema";
+import matter from "gray-matter";
+import { glob } from "glob";
+import { markdownSnippetFrontmatterSchema } from "../src/schemas/markdownKnowledge";
 
 const SNIPPETS_DIR = path.resolve(process.cwd(), "snippets");
 
-async function loadSnippetFiles(): Promise<{ file: string; raw: unknown }[]> {
-  const entries = await fs.readdir(SNIPPETS_DIR, { withFileTypes: true });
-  const jsonFiles = entries.filter(
-    (e) => e.isFile() && e.name.endsWith(".json"),
-  );
-  return Promise.all(
-    jsonFiles.map(async (e) => {
+async function loadSnippetMarkdownFiles(): Promise<
+  { file: string; frontmatter: unknown }[]
+> {
+  const files = await glob("**/*.md", {
+    cwd: SNIPPETS_DIR,
+    nodir: true,
+    ignore: ["**/node_modules/**", "**/.git/**"],
+  });
+
+  const docs = await Promise.all(
+    files.map(async (relativePath) => {
       const content = await fs.readFile(
-        path.join(SNIPPETS_DIR, e.name),
+        path.join(SNIPPETS_DIR, relativePath),
         "utf-8",
       );
-      return { file: e.name, raw: JSON.parse(content) };
+      const parsed = matter(content);
+      return {
+        file: relativePath.replace(/\\/g, "/"),
+        frontmatter: parsed.data,
+      };
     }),
   );
+
+  return docs;
 }
 
-describe("snippetSchema", () => {
-  it("accepts a minimal valid snippet", () => {
-    const result = snippetSchema.safeParse({
-      name: "my-snippet",
+describe("markdownSnippetFrontmatterSchema", () => {
+  it("accepts a minimal valid frontmatter payload", () => {
+    const result = markdownSnippetFrontmatterSchema.safeParse({
+      id: "my-snippet",
       title: "My Snippet",
-      language: "csharp",
-      description: "A test snippet.",
-      code: 'Console.WriteLine("hello");',
+      summary: "A test summary.",
     });
     expect(result.success).toBe(true);
   });
 
-  it("accepts a fully-populated valid snippet", () => {
-    const result = snippetSchema.safeParse({
+  it("accepts a fully populated frontmatter payload", () => {
+    const result = markdownSnippetFrontmatterSchema.safeParse({
+      id: "jwt-setup",
       name: "jwt-setup",
       title: "JWT Setup",
+      summary: "JWT bearer setup.",
       language: "csharp",
-      description: "JWT bearer setup.",
-      code: "// code here",
       category: "auth",
       tags: ["jwt", "bearer"],
       framework: "aspnet",
@@ -51,56 +61,40 @@ describe("snippetSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("rejects a snippet with an invalid name (contains spaces)", () => {
-    const result = snippetSchema.safeParse({
-      name: "my snippet",
+  it("rejects invalid difficulty values", () => {
+    const result = markdownSnippetFrontmatterSchema.safeParse({
+      id: "my-snippet",
       title: "My Snippet",
-      language: "csharp",
-      description: "Test.",
-      code: "// code",
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it("rejects a snippet with an invalid difficulty value", () => {
-    const result = snippetSchema.safeParse({
-      name: "my-snippet",
-      title: "My Snippet",
-      language: "csharp",
-      description: "Test.",
-      code: "// code",
+      summary: "Test.",
       difficulty: "expert",
     });
     expect(result.success).toBe(false);
   });
 
-  it("rejects a snippet with a missing required field", () => {
-    const result = snippetSchema.safeParse({
-      name: "my-snippet",
+  it("rejects missing required fields", () => {
+    const result = markdownSnippetFrontmatterSchema.safeParse({
+      id: "my-snippet",
       title: "My Snippet",
-      language: "csharp",
-      // description missing
-      code: "// code",
     });
     expect(result.success).toBe(false);
   });
 
-  describe("all snippet files in snippets/ conform to schema", () => {
-    let snippetFiles: { file: string; raw: unknown }[] = [];
+  describe("all markdown snippets conform to schema", () => {
+    let snippetFiles: { file: string; frontmatter: unknown }[] = [];
 
     beforeAll(async () => {
-      snippetFiles = await loadSnippetFiles();
+      snippetFiles = await loadSnippetMarkdownFiles();
     });
 
-    it("finds at least one snippet file", () => {
-      expect(snippetFiles.length).toBeGreaterThan(0);
+    it("has at least 20 snippet markdown files", () => {
+      expect(snippetFiles.length).toBeGreaterThanOrEqual(20);
     });
 
-    it("every snippet file is valid", () => {
+    it("every snippet frontmatter is valid", () => {
       const failures: string[] = [];
 
-      for (const { file, raw } of snippetFiles) {
-        const result = snippetSchema.safeParse(raw);
+      for (const { file, frontmatter } of snippetFiles) {
+        const result = markdownSnippetFrontmatterSchema.safeParse(frontmatter);
         if (!result.success) {
           const issues = result.error.issues
             .map((i) => `  ${i.path.join(".")}: ${i.message}`)
@@ -111,7 +105,7 @@ describe("snippetSchema", () => {
 
       if (failures.length > 0) {
         throw new Error(
-          `The following snippet files failed schema validation:\n\n${failures.join("\n\n")}`,
+          `The following snippet files failed frontmatter schema validation:\n\n${failures.join("\n\n")}`,
         );
       }
     });

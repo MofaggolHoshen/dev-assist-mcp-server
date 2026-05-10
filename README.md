@@ -1,55 +1,83 @@
-# DevAssist MCP Server
+# README.md Structure for DevAssist MCP
 
-stdio-based MCP server in TypeScript that exposes project file access, reusable snippets, and lightweight project analysis tools for AI clients.
+````md id="j9f2tw"
+# DevAssist MCP
 
-## Quick Start
+Production-ready developer assistance through Model Context Protocol (MCP).
 
-1. Install dependencies:
+DevAssist MCP provides curated engineering snippets, architecture guidance, implementation examples, and best practices optimized for AI-assisted development workflows.
+
+---
+
+# Features
+
+- MCP-compatible developer assistant
+- Production-ready engineering snippets
+- ASP.NET and backend-focused examples
+- Version-aware implementations
+- Explain engineering concepts
+- AI-friendly structured responses
+- Lightweight and extensible architecture
+
+---
+
+# Supported Categories
+
+- JWT Authentication
+- JWE
+- Polly Retry Policies
+- Circuit Breakers
+- Serilog
+- OpenTelemetry
+- Redis Caching
+- CQRS
+- DDD
+- Clean Architecture
+- MassTransit
+- Saga Pattern
+- Rate Limiting
+- Background Jobs
+
+---
+
+# Installation
+
+## Using npm
 
 ```bash
-npm install
+npm install @mofaggolhoshen/dev-assist-mcp
 ```
 
-1. Build the server:
+---
+
+# Quick Start
+
+## Run the MCP Server
 
 ```bash
-npm run build
+npx @mofaggolhoshen/dev-assist-mcp
 ```
 
-1. Run locally (compiled):
+---
 
-```bash
-npm start
-```
+# Claude Desktop Integration
 
-1. Or run in development mode:
-
-```bash
-npm run dev
-```
-
-## VS Code MCP Configuration
-
-You can run the MCP server in VS Code either from this repository or from the published npm package.
-
-Local workspace setup:
+Add the following configuration:
 
 ```json
 {
-  "servers": {
-    "dev-assist": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["dist/index.js"],
-      "cwd": "${workspaceFolder}"
+  "mcpServers": {
+    "dev-assist-mcp": {
+      "command": "npx",
+      "args": [
+        "@mofaggolhoshen/dev-assist-mcp"
+      ]
     }
   }
 }
 ```
 
-Build once with `npm run build`, then VS Code can launch the server through stdio.
-
-Published npm package setup:
+# VS Code Integration
 
 ```json
 {
@@ -62,48 +90,162 @@ Published npm package setup:
   }
 }
 ```
+---
 
-This package-based setup is useful when you do not want to build the server from source inside each workspace.
+# Example Prompts
 
-## Tool Catalog
+## Search Snippets
 
-| Tool | Description | Input |
-| --- | --- | --- |
-| `ping` | Returns pong to verify the server is reachable | `{}` |
-| `list_files` | Lists files recursively under a directory | `{ path?: string }` |
-| `read_file` | Reads a text file from the workspace | `{ path: string }` |
-| `search_code` | Keyword search across text-like files | `{ keyword: string, path?: string }` |
-| `get_snippet` | Returns a named snippet from `snippets/` | `{ name: string }` |
-| `analyze_project` | Detects language/framework/architecture hints | `{ path?: string }` |
+```txt
+Give me JWT authentication setup for ASP.NET 9
+```
 
-## Adding Custom Tools
+```txt
+Show Polly retry with exponential backoff
+```
 
-1. Create a new tool module under `src/tools/...` implementing the `Tool` interface from `src/tools/types.ts`.
-2. Define `name`, `description`, `inputSchema` (Zod), and `execute`.
-3. Register the tool in `src/index.ts` using `registry.register(yourTool)`.
-4. Rebuild with `npm run build`.
+---
 
-## Snippet Authoring
+## Explain Concepts
 
-Add JSON files under `snippets/` using this schema:
+```txt
+Explain Circuit Breaker pattern
+```
+
+```txt
+Explain CQRS with example
+```
+
+---
+
+# MCP Tools
+
+| Tool | Description |
+|---|---|
+| search_snippet | Search reusable snippets |
+| get_snippet | Retrieve detailed snippet |
+| explain_concept | Explain engineering concepts |
+| generate_setup | Generate production-ready setup |
+
+---
+
+# Example Response
 
 ```json
 {
-  "name": "snippet-name",
-  "title": "Human Friendly Title",
-  "language": "csharp",
-  "description": "What this snippet does",
-  "code": "...source code...",
-  "category": "auth",
-  "tags": ["jwt", "security"],
-  "framework": "aspnet",
-  "version": ".net8+",
-  "difficulty": "medium",
-  "bestPractices": ["Validate issuer and audience"],
-  "pitfalls": ["Do not hardcode secrets"],
-  "securityNotes": ["Use HTTPS for bearer tokens"]
+  "title": "JWT Authentication ASP.NET 9",
+  "framework": ".net9",
+  "summary": "Production-ready JWT setup",
+  "bestPractices": [
+    "Use short-lived access tokens"
+  ]
 }
 ```
 
-The `name` must match `[A-Za-z0-9-]+` because it maps to `snippets/{name}.json`.
-Only `name`, `title`, `language`, `description`, and `code` are required. The rest are strongly recommended for production-ready outputs.
+---
+
+# Architecture
+
+```txt
+AI Client
+   ↓
+DevAssist MCP Server
+   ↓
+Search Engine
+   ↓
+Markdown/JSON Snippets
+```
+
+---
+
+# Repository Structure
+
+```txt
+src/
+snippets/
+examples/
+docs/
+tests/
+```
+
+---
+
+# Development
+
+## Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+## Start Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+## Run Tests
+
+```bash
+npm run test
+```
+
+---
+
+# Snippet Format
+
+Example snippet metadata:
+
+```yaml
+id: jwt-auth-dotnet8
+title: JWT Authentication ASP.NET 8
+framework: .net8
+tags:
+  - jwt
+  - authentication
+difficulty: medium
+```
+
+---
+
+# Contributing
+
+Contributions are welcome.
+
+Please read:
+- CONTRIBUTING.md
+- SNIPPET_GUIDE.md
+
+before submitting pull requests.
+
+---
+
+# Goals
+
+DevAssist MCP aims to improve AI-assisted software engineering by providing reliable, production-grade developer context.
+
+---
+
+# License
+
+MIT
+
+---
+
+# Author
+
+Mofaggol Hoshen
+
+---
+
+# Links
+
+- GitHub Repository
+- npm Package
+- Documentation
+- Examples
+````

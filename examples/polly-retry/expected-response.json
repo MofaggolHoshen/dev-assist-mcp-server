@@ -1,0 +1,14 @@
+{
+  "total": 1,
+  "results": [
+    {
+      "id": "polly-retry",
+      "title": "Polly Retry Policy",
+      "category": "resilience",
+      "framework": "dotnet",
+      "confidence": "high",
+      "rankScore": 0.82,
+      "reasons": ["title_match", "tag_matches:3"]
+    }
+  ]
+}

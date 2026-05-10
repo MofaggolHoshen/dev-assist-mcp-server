@@ -21,7 +21,7 @@ The objective is to evolve the project from a lightweight utility MCP server int
 - TypeScript MCP server using the MCP TypeScript SDK
 - Tool registry abstraction for registering MCP tools
 - File-system tools for file listing, reading, and keyword search
-- Snippet retrieval from local JSON snippet storage
+- Snippet retrieval from local file-based snippet storage
 - Lightweight project analysis capability
 - Jest-based automated tests for the core tool surface
 - npm package publishing path already in use
@@ -105,10 +105,11 @@ Goal: define a durable content schema that supports snippets, templates, concept
 
 Deliverables:
 
-- Canonical JSON schema for snippet metadata
+- Canonical Markdown + YAML frontmatter schema for snippet content and metadata
 - Separate schema for templates and concepts
 - Required metadata fields: id, name, title, category, tags, framework, version, language, difficulty
 - Optional metadata fields: bestPractices, pitfalls, securityNotes, references, updatedAt
+- gray-matter based parser for frontmatter extraction and markdown body parsing
 - Folder taxonomy aligned to PRD categories
 - Validation script or test coverage to reject malformed content
 
@@ -220,11 +221,17 @@ Status legend:
 | Phase | Status | Focus |
 | ----- | ------ | ----- |
 | Phase 1 - Foundation Hardening | Completed | Schema/response foundations, metadata normalization, baseline tests |
-| Phase 2 - PRD MVP Delivery | Not Started | PRD tool set, content expansion, version-aware retrieval |
-| Phase 3 - Relevance and Intelligence | Not Started | Ranking, normalization, quality signals |
+| Phase 2 - PRD MVP Delivery | Completed | PRD tool set, content expansion, version-aware retrieval |
+| Phase 3 - Relevance and Intelligence | Completed | Ranking, normalization, quality signals |
 | Phase 4 - Semantic Search and Platform Expansion | Not Started | Hybrid/semantic retrieval and ecosystem expansion |
 
 Last status update: 2026-05-10
+
+Format decision:
+
+- Canonical snippet storage format is Markdown with YAML frontmatter.
+- gray-matter is the required parser for frontmatter and markdown body extraction.
+- Existing JSON snippets have been migrated and removed in Phase 2.
 
 ### Phase 1 - Foundation Hardening
 
@@ -267,7 +274,7 @@ Exit criteria:
 
 ### Phase 2 - PRD MVP Delivery
 
-Status: Not Started
+Status: Completed
 
 Objective: deliver the minimum product promised in the PRD using file-based storage.
 
@@ -277,6 +284,7 @@ Scope:
 - Implement get_template
 - Implement explain_concept
 - Implement generate_setup
+- Migrate snippet storage to Markdown with YAML frontmatter using gray-matter
 - Add categorized content for Authentication, Resilience, Logging, Architecture, Caching, and Messaging
 - Add version-aware matching for initial .NET-focused content
 
@@ -285,6 +293,19 @@ Outputs:
 - PRD-aligned tool catalog
 - Local search MVP
 - Richer knowledge assets
+
+Completion summary:
+
+- Implemented search_snippet, get_template, explain_concept, and generate_setup tools
+- Registered all new tools in MCP server bootstrap
+- Added markdown + YAML frontmatter snippet parser using gray-matter
+- Added Fuse.js-based snippet search ranking with framework/version/category/difficulty filters
+- Seeded initial markdown content for snippets, templates, concepts, and setups
+- Migrated and removed remaining legacy JSON snippets from snippets/
+- Expanded markdown snippet library beyond the 20-snippet Phase 2 threshold
+- Added automated tests for all new Phase 2 tools
+- Verified snippet corpus size: 21 markdown snippets
+- Verified build and test stability (tsc + Jest green)
 
 Exit criteria:
 
@@ -295,7 +316,7 @@ Exit criteria:
 
 ### Phase 3 - Relevance and Intelligence
 
-Status: Not Started
+Status: Completed
 
 Objective: improve result quality before adding semantic infrastructure.
 
@@ -312,6 +333,17 @@ Outputs:
 - Better search relevance
 - Clearer output quality signals
 - Reduced ambiguity for AI clients
+
+Completion summary:
+
+- Implemented deterministic rank scoring with stable tie-breaking in snippet search
+- Added query normalization and synonym expansion (for example jwt/bearer/token and efcore/entityframework)
+- Added version hint extraction and precedence scoring from query text
+- Added freshness weighting using updatedAt/stat mtime fallback
+- Added confidence indicators and reasons in search_snippet response payload
+- Enhanced explain_concept and get_template outputs with metadata sections and related snippet suggestions
+- Added and validated Phase 3 tests for normalization, confidence fields, and version-prioritized results
+- Verified build and test stability after changes (tsc + Jest green)
 
 Exit criteria:
 
@@ -349,11 +381,22 @@ Exit criteria:
 - Create shared TypeScript types for snippet/template/concept/setup content
 - Add Zod schemas for all content types
 - Add content fixtures for tests
+- Parse snippet metadata via gray-matter from YAML frontmatter
 - Define required sections for production-ready content
 
 Each snippet should follow this standard structure:
 
 ```
+---
+id: jwt-auth-dotnet8
+title: JWT Authentication ASP.NET 8
+framework: .net8
+tags:
+	- jwt
+	- authentication
+difficulty: medium
+---
+
 Title
 Summary
 Installation
@@ -376,6 +419,7 @@ References
 
 - Build file loader and in-memory catalog
 - Implement indexing on startup
+- Parse markdown snippets with gray-matter before indexing metadata fields
 - Use Fuse.js for fuzzy, typo-tolerant search across title, tags, category, and framework
 - Add exact and partial keyword matching
 - Add filtering by metadata

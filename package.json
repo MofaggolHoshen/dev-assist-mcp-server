@@ -42,7 +42,9 @@
   "type": "module",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "fuse.js": "^7.3.0",
     "glob": "^13.0.6",
+    "gray-matter": "^4.0.3",
     "zod": "^4.3.6",
     "zod-to-json-schema": "^3.25.2"
   },

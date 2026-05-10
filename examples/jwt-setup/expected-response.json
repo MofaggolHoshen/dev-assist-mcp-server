@@ -1,0 +1,16 @@
+{
+  "total": 1,
+  "results": [
+    {
+      "id": "jwt-setup-dotnet9",
+      "title": "JWT Setup (.NET 9)",
+      "category": "auth",
+      "framework": "aspnet",
+      "version": ".net9",
+      "difficulty": "medium",
+      "confidence": "high",
+      "rankScore": 0.87,
+      "reasons": ["tag_matches:2", "version_precedence", "fresh_content"]
+    }
+  ]
+}

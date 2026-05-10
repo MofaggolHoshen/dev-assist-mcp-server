@@ -5,6 +5,10 @@ import { listFilesTool } from "./tools/fs/listFiles.js";
 import { readFileTool } from "./tools/fs/readFile.js";
 import { searchCodeTool } from "./tools/fs/searchCode.js";
 import { getSnippetTool } from "./tools/knowledge/getSnippet.js";
+import { searchSnippetTool } from "./tools/knowledge/searchSnippet.js";
+import { getTemplateTool } from "./tools/knowledge/getTemplate.js";
+import { explainConceptTool } from "./tools/knowledge/explainConcept.js";
+import { generateSetupTool } from "./tools/knowledge/generateSetup.js";
 import { analyzeProjectTool } from "./tools/intelligence/analyzeProject.js";
 
 const server = new McpServer(
@@ -18,6 +22,10 @@ registry.register(listFilesTool);
 registry.register(readFileTool);
 registry.register(searchCodeTool);
 registry.register(getSnippetTool);
+registry.register(searchSnippetTool);
+registry.register(getTemplateTool);
+registry.register(explainConceptTool);
+registry.register(generateSetupTool);
 registry.register(analyzeProjectTool);
 
 for (const tool of registry.list()) {
