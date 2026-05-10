@@ -15,7 +15,20 @@
     "dev": "tsx src/index.ts",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "developer-tools",
+    "ai",
+    "copilot",
+    "snippets",
+    "aspnet",
+    "dotnet",
+    "csharp",
+    "knowledge-base",
+    "code-generation",
+    "dev-assist"
+  ],
   "author": "",
   "license": "ISC",
   "repository": {

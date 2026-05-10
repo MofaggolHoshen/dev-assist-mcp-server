@@ -3,5 +3,23 @@
   "title": "JWT Authentication Setup (ASP.NET Core)",
   "language": "csharp",
   "description": "Configures JWT bearer authentication with token validation parameters.",
-  "code": "builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)\n    .AddJwtBearer(options =>\n    {\n        options.TokenValidationParameters = new TokenValidationParameters\n        {\n            ValidateIssuer = true,\n            ValidateAudience = true,\n            ValidateIssuerSigningKey = true,\n            ValidIssuer = config[\"Jwt:Issuer\"],\n            ValidAudience = config[\"Jwt:Audience\"],\n            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config[\"Jwt:Key\"]!))\n        };\n    });"
+  "code": "builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)\n    .AddJwtBearer(options =>\n    {\n        options.TokenValidationParameters = new TokenValidationParameters\n        {\n            ValidateIssuer = true,\n            ValidateAudience = true,\n            ValidateIssuerSigningKey = true,\n            ValidIssuer = config[\"Jwt:Issuer\"],\n            ValidAudience = config[\"Jwt:Audience\"],\n            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config[\"Jwt:Key\"]!))\n        };\n    });",
+  "category": "auth",
+  "tags": ["jwt", "authentication", "bearer", "aspnet", "security"],
+  "framework": "aspnet",
+  "version": ".net8+",
+  "difficulty": "medium",
+  "bestPractices": [
+    "Always validate issuer and audience to prevent token misuse",
+    "Store the signing key in environment variables or a secrets manager — never in source code",
+    "Use short-lived access tokens combined with refresh token rotation"
+  ],
+  "pitfalls": [
+    "Omitting audience or issuer validation opens the server to token substitution attacks",
+    "Using a weak or short signing key reduces security below acceptable thresholds"
+  ],
+  "securityNotes": [
+    "The signing key must be at least 256 bits (32 bytes) for HS256",
+    "Use HTTPS exclusively to prevent bearer tokens from being intercepted in transit"
+  ]
 }
