@@ -1,83 +1,64 @@
-# README.md Structure for DevAssist MCP
-
-````md id="j9f2tw"
 # DevAssist MCP
 
 Production-ready developer assistance through Model Context Protocol (MCP).
 
-DevAssist MCP provides curated engineering snippets, architecture guidance, implementation examples, and best practices optimized for AI-assisted development workflows.
+DevAssist MCP is an AI-first developer knowledge server that provides curated snippets, setup guides, architecture templates, concept explanations, and project analysis for modern engineering workflows.
 
----
+## Why DevAssist MCP
 
-# Features
+AI-generated code is often incomplete, outdated, or missing production context. DevAssist MCP improves output quality by returning structured, version-aware, reusable engineering knowledge instead of generic examples.
 
-- MCP-compatible developer assistant
-- Production-ready engineering snippets
-- ASP.NET and backend-focused examples
-- Version-aware implementations
-- Explain engineering concepts
-- AI-friendly structured responses
-- Lightweight and extensible architecture
+## Key Capabilities
 
----
+- MCP-compatible stdio server
+- Production-ready, curated engineering content
+- Framework and version-aware retrieval
+- Deterministic ranking with confidence signals
+- Explain mode for engineering concepts
+- Setup generation for common backend scenarios
+- Template retrieval for architecture starters
+- File-system and project analysis utility tools
+- Structured responses optimized for AI clients
 
-# Supported Categories
+## Supported Domains
 
-- JWT Authentication
-- JWE
-- Polly Retry Policies
-- Circuit Breakers
-- Serilog
-- OpenTelemetry
-- Redis Caching
-- CQRS
-- DDD
-- Clean Architecture
-- MassTransit
-- Saga Pattern
-- Rate Limiting
-- Background Jobs
+- Authentication: JWT, JWE, role-based authorization, refresh-token rotation
+- Resilience: retry, timeout, circuit breaker, fallback, bulkhead
+- Observability: Serilog, OpenTelemetry tracing, structured logging
+- Architecture: Clean Architecture, CQRS, DDD, repository patterns
+- Messaging: MassTransit, RabbitMQ, outbox, saga state machine
+- Caching: Redis distributed cache, cache-aside
 
----
+## Installation
 
-# Installation
-
-## Using npm
+### npm
 
 ```bash
 npm install @mofaggolhoshen/dev-assist-mcp
 ```
 
----
-
-# Quick Start
-
-## Run the MCP Server
+### Run with npx
 
 ```bash
-npx @mofaggolhoshen/dev-assist-mcp
+npx -y @mofaggolhoshen/dev-assist-mcp
 ```
 
----
+## MCP Client Integration
 
-# Claude Desktop Integration
-
-Add the following configuration:
+### Claude Desktop
 
 ```json
 {
   "mcpServers": {
     "dev-assist-mcp": {
       "command": "npx",
-      "args": [
-        "@mofaggolhoshen/dev-assist-mcp"
-      ]
+      "args": ["-y", "@mofaggolhoshen/dev-assist-mcp"]
     }
   }
 }
 ```
 
-# VS Code Integration
+### VS Code MCP
 
 ```json
 {
@@ -90,162 +71,182 @@ Add the following configuration:
   }
 }
 ```
----
 
-# Example Prompts
+## MCP Tools
 
-## Search Snippets
+### Knowledge Tools (PRD-aligned)
 
-```txt
-Give me JWT authentication setup for ASP.NET 9
-```
-
-```txt
-Show Polly retry with exponential backoff
-```
-
----
-
-## Explain Concepts
-
-```txt
-Explain Circuit Breaker pattern
-```
-
-```txt
-Explain CQRS with example
-```
-
----
-
-# MCP Tools
-
-| Tool | Description |
+| Tool | Purpose |
 |---|---|
-| search_snippet | Search reusable snippets |
-| get_snippet | Retrieve detailed snippet |
-| explain_concept | Explain engineering concepts |
-| generate_setup | Generate production-ready setup |
+| search_snippet | Search reusable engineering snippets with optional filters |
+| get_snippet | Retrieve a detailed snippet by name |
+| get_template | Return complete implementation templates |
+| explain_concept | Explain engineering concepts with practical guidance |
+| generate_setup | Generate production-ready setup guidance |
 
----
+### Utility Tools
 
-# Example Response
+| Tool | Purpose |
+|---|---|
+| list_files | List files under a project path |
+| read_file | Read a text file from project scope |
+| search_code | Search keyword matches in project text files |
+| analyze_project | Detect language, framework, architecture, and container hints |
+
+## Example Prompts
+
+- Give me JWT authentication setup for ASP.NET 9
+- Show Polly retry with exponential backoff
+- Explain circuit breaker pattern
+- Get clean architecture template
+- Analyze this repository structure
+
+## Example Structured Response
 
 ```json
 {
-  "title": "JWT Authentication ASP.NET 9",
-  "framework": ".net9",
-  "summary": "Production-ready JWT setup",
-  "bestPractices": [
-    "Use short-lived access tokens"
+  "query": "jwt authentication asp.net 9",
+  "filters": {
+    "framework": ".net",
+    "version": "9",
+    "category": "auth",
+    "difficulty": "medium",
+    "limit": 10
+  },
+  "total": 1,
+  "results": [
+    {
+      "id": "jwt-setup-dotnet9",
+      "title": "JWT Authentication ASP.NET 9",
+      "framework": ".net",
+      "version": "9",
+      "difficulty": "medium",
+      "confidence": "high",
+      "reasons": ["framework-match", "version-match", "tag-match"]
+    }
   ]
 }
 ```
 
----
-
-# Architecture
+## Architecture (MVP)
 
 ```txt
-AI Client
-   ↓
-DevAssist MCP Server
-   ↓
-Search Engine
-   ↓
-Markdown/JSON Snippets
+AI Client (Copilot / Cursor / Claude)
+            |
+            v
+DevAssist MCP Server (TypeScript MCP SDK)
+            |
+            v
+Catalog + Ranking + Validation Layers
+            |
+            v
+Markdown Knowledge Store (snippets, templates, concepts, setups)
 ```
 
----
-
-# Repository Structure
+## Repository Layout
 
 ```txt
 src/
+  tools/
+  storage/
+  ranking/
+  catalog/
+  content/
 snippets/
+content/
+  concepts/
+  templates/
+  setups/
 examples/
 docs/
 tests/
 ```
 
----
+## Development
 
-# Development
-
-## Install Dependencies
+### Install dependencies
 
 ```bash
 npm install
 ```
 
----
-
-## Start Development Server
+### Run in development
 
 ```bash
 npm run dev
 ```
 
----
+### Build
 
-## Run Tests
+```bash
+npm run build
+```
+
+### Run tests
 
 ```bash
 npm run test
 ```
 
----
+## Content Authoring Format
 
-# Snippet Format
+Knowledge content uses Markdown with YAML frontmatter.
 
-Example snippet metadata:
+### Snippet frontmatter example
 
 ```yaml
-id: jwt-auth-dotnet8
-title: JWT Authentication ASP.NET 8
-framework: .net8
+---
+id: jwt-setup-dotnet9
+name: jwt-setup-dotnet9
+title: JWT Authentication ASP.NET 9
+summary: Production-ready JWT authentication setup for ASP.NET 9 APIs
+framework: aspnet
+version: .net9
+language: csharp
+category: auth
 tags:
   - jwt
   - authentication
+  - bearer
 difficulty: medium
+bestPractices:
+  - Use short-lived access tokens
+pitfalls:
+  - Do not hardcode signing keys
+securityNotes:
+  - Store secrets in a secure secret manager
+updatedAt: 2026-05-10
+---
 ```
 
----
+## Non-Functional Targets
 
-# Contributing
+- Snippet search target: under 500ms
+- MCP response target: under 1 second
+- Startup target: under 5 seconds
 
-Contributions are welcome.
+## Roadmap Status
 
-Please read:
-- CONTRIBUTING.md
-- SNIPPET_GUIDE.md
+- Phase 1 Foundation Hardening: Completed
+- Phase 2 PRD MVP Delivery: Completed
+- Phase 3 Relevance and Intelligence: Completed
+- Phase 4 Semantic Search and Platform Expansion: Not Started
 
-before submitting pull requests.
+## Contributing
 
----
+Contributions are welcome through pull requests and issues.
 
-# Goals
+## License
 
-DevAssist MCP aims to improve AI-assisted software engineering by providing reliable, production-grade developer context.
+ISC
 
----
-
-# License
-
-MIT
-
----
-
-# Author
+## Author
 
 Mofaggol Hoshen
 
----
+## Links
 
-# Links
-
-- GitHub Repository
-- npm Package
-- Documentation
-- Examples
-````
+- Repository: https://github.com/MofaggolHoshen/dev-assist-mcp-server
+- Package: https://www.npmjs.com/package/@mofaggolhoshen/dev-assist-mcp
+- Product Requirements: docs/PRD-v2.md
+- Implementation Plan: docs/Implementation-Plan.md
