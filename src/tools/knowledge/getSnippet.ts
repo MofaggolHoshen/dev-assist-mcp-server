@@ -3,14 +3,8 @@ import path from "node:path";
 import { z } from "zod";
 import { Tool } from "../types.js";
 import { resolveSafePath } from "../fs/safePath.js";
-
-const snippetFileSchema = z.object({
-  name: z.string(),
-  title: z.string(),
-  language: z.string(),
-  description: z.string(),
-  code: z.string(),
-});
+import { snippetSchema } from "../../content/snippetSchema.js";
+import { textResponse } from "../../shared/response.js";
 
 async function listAvailableSnippetNames(
   snippetsDir: string,
@@ -45,21 +39,41 @@ export const getSnippetTool: Tool = {
 
     try {
       const raw = await fs.readFile(filePath, "utf-8");
-      const snippet = snippetFileSchema.parse(JSON.parse(raw));
+      const snippet = snippetSchema.parse(JSON.parse(raw));
 
-      const text = [
+      const lines: string[] = [
         `# ${snippet.title}`,
         "",
         snippet.description,
         "",
-        `Language: ${snippet.language}`,
-        "",
-        `\`\`\`${snippet.language}`,
-        snippet.code,
-        "\`\`\`",
-      ].join("\n");
+      ];
 
-      return { content: [{ type: "text", text }] };
+      const meta: string[] = [`Language: ${snippet.language}`];
+      if (snippet.framework) meta.push(`Framework: ${snippet.framework}`);
+      if (snippet.version) meta.push(`Version: ${snippet.version}`);
+      if (snippet.difficulty) meta.push(`Difficulty: ${snippet.difficulty}`);
+      if (snippet.category) meta.push(`Category: ${snippet.category}`);
+      if (snippet.tags?.length) meta.push(`Tags: ${snippet.tags.join(", ")}`);
+      lines.push(meta.join(" | "), "");
+
+      lines.push(`\`\`\`${snippet.language}`, snippet.code, "```");
+
+      if (snippet.bestPractices?.length) {
+        lines.push("", "## Best Practices");
+        snippet.bestPractices.forEach((bp) => lines.push(`- ${bp}`));
+      }
+
+      if (snippet.pitfalls?.length) {
+        lines.push("", "## Pitfalls");
+        snippet.pitfalls.forEach((p) => lines.push(`- ${p}`));
+      }
+
+      if (snippet.securityNotes?.length) {
+        lines.push("", "## Security Notes");
+        snippet.securityNotes.forEach((s) => lines.push(`- ${s}`));
+      }
+
+      return textResponse(lines.join("\n"));
     } catch (err: any) {
       const available = await listAvailableSnippetNames(snippetsDir);
       const availableText = available.length
@@ -71,7 +85,7 @@ export const getSnippetTool: Tool = {
         ? `Snippet '${input.name}' was not found. Available snippets: ${availableText}`
         : `Could not load snippet '${input.name}': ${err.message}. Available snippets: ${availableText}`;
 
-      return { content: [{ type: "text", text }] };
+      return textResponse(text);
     }
   },
 };

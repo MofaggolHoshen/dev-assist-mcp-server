@@ -57,7 +57,7 @@ Published npm package setup:
     "dev-assist": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@mofaggolhoshen/dev-assist-mcp-server"]
+      "args": ["-y", "@mofaggolhoshen/dev-assist-mcp"]
     }
   }
 }
@@ -93,8 +93,17 @@ Add JSON files under `snippets/` using this schema:
   "title": "Human Friendly Title",
   "language": "csharp",
   "description": "What this snippet does",
-  "code": "...source code..."
+  "code": "...source code...",
+  "category": "auth",
+  "tags": ["jwt", "security"],
+  "framework": "aspnet",
+  "version": ".net8+",
+  "difficulty": "medium",
+  "bestPractices": ["Validate issuer and audience"],
+  "pitfalls": ["Do not hardcode secrets"],
+  "securityNotes": ["Use HTTPS for bearer tokens"]
 }
 ```
 
 The `name` must match `[A-Za-z0-9-]+` because it maps to `snippets/{name}.json`.
+Only `name`, `title`, `language`, `description`, and `code` are required. The rest are strongly recommended for production-ready outputs.

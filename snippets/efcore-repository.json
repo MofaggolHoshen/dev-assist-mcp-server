@@ -3,5 +3,19 @@
   "title": "EF Core Repository Pattern",
   "language": "csharp",
   "description": "Simple EF Core repository with asynchronous read/write operations.",
-  "code": "public sealed class ProductRepository(AppDbContext db)\n{\n    public Task<Product?> GetByIdAsync(Guid id, CancellationToken ct = default) =>\n        db.Products.FirstOrDefaultAsync(p => p.Id == id, ct);\n\n    public async Task AddAsync(Product entity, CancellationToken ct = default)\n    {\n        await db.Products.AddAsync(entity, ct);\n        await db.SaveChangesAsync(ct);\n    }\n}"
+  "code": "public sealed class ProductRepository(AppDbContext db)\n{\n    public Task<Product?> GetByIdAsync(Guid id, CancellationToken ct = default) =>\n        db.Products.FirstOrDefaultAsync(p => p.Id == id, ct);\n\n    public async Task AddAsync(Product entity, CancellationToken ct = default)\n    {\n        await db.Products.AddAsync(entity, ct);\n        await db.SaveChangesAsync(ct);\n    }\n}",
+  "category": "architecture",
+  "tags": ["efcore", "repository", "data-access", "pattern", "async"],
+  "framework": "dotnet",
+  "version": ".net8+",
+  "difficulty": "beginner",
+  "bestPractices": [
+    "Pass CancellationToken through all async database calls",
+    "Use primary constructor injection for cleaner, concise syntax",
+    "Keep repositories focused on a single aggregate root"
+  ],
+  "pitfalls": [
+    "Avoid exposing IQueryable from the repository — return concrete types to prevent leaky abstractions",
+    "Calling SaveChangesAsync inside every method prevents batching; consider a Unit of Work pattern"
+  ]
 }

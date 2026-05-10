@@ -1,10 +1,10 @@
 {
-  "name": "@mofaggolhoshen/dev-assist-mcp-server",
-  "version": "1.0.3",
+  "name": "@mofaggolhoshen/dev-assist-mcp",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/index.js",
   "bin": {
-    "dev-assist-mcp-server": "dist/cli.js"
+    "dev-assist-mcp": "dist/cli.js"
   },
   "directories": {
     "doc": "docs"
@@ -15,7 +15,20 @@
     "dev": "tsx src/index.ts",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "developer-tools",
+    "ai",
+    "copilot",
+    "snippets",
+    "aspnet",
+    "dotnet",
+    "csharp",
+    "knowledge-base",
+    "code-generation",
+    "dev-assist"
+  ],
   "author": "",
   "license": "ISC",
   "repository": {
