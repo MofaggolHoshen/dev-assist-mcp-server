@@ -2,7 +2,7 @@ import path from "node:path";
 import { z } from "zod";
 import { glob } from "glob";
 import { Tool } from "../types.js";
-import { resolveSafePath } from "../fs/safePath.js";
+import { resolveSafePath } from "../../shared/safePath.js";
 import { textResponse } from "../../shared/response.js";
 import { findSnippetByName } from "../../storage/markdownKnowledgeStore.js";
 
@@ -25,7 +25,7 @@ async function listAvailableMarkdownSnippetNames(): Promise<string[]> {
 export const getSnippetTool: Tool = {
   name: "get_snippet",
   description:
-    "Returns a reusable code snippet by name from the local snippets directory",
+    "Retrieve the full code content of a specific snippet by its exact name or ID. Use this after search_snippet to get the complete implementation including code, best practices, pitfalls, and security notes. Requires the snippet's exact name (e.g. 'jwt-setup-dotnet9', 'polly-retry'). Do not use this for searching — use search_snippet first if you don't know the exact name.",
   inputSchema: z.object({
     name: z
       .string()

@@ -9,7 +9,8 @@ import {
 
 export const explainConceptTool: Tool = {
   name: "explain_concept",
-  description: "Explain engineering concepts with practical guidance",
+  description:
+    "Explain an engineering concept or pattern with practical guidance, use cases, and examples. Use this ONLY when the user asks to 'explain', 'what is', or 'how does X work' for a known architectural concept (e.g. 'explain circuit breaker', 'what is CQRS', 'how does saga pattern work'). The 'concept' parameter must be a slug with only letters, numbers, and hyphens (e.g. 'circuit-breaker', 'cqrs', 'saga-pattern'). Do NOT use this for setup requests, code snippet requests, or free-form questions.",
   inputSchema: z.object({
     concept: z
       .string()

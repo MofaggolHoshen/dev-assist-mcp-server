@@ -9,7 +9,8 @@ import {
 
 export const getTemplateTool: Tool = {
   name: "get_template",
-  description: "Return complete implementation templates",
+  description:
+    "Return a complete implementation starter template for an architecture or project structure. Use this when the user asks for a 'template', 'starter', 'scaffold', or 'project structure' (e.g. 'clean architecture template', 'CQRS starter', 'get me a DDD project layout'). The 'template' parameter must be a slug (e.g. 'clean-architecture', 'cqrs-starter'). This returns full folder structure and boilerplate — not a single code snippet.",
   inputSchema: z.object({
     template: z
       .string()
