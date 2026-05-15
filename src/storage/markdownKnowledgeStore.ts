@@ -3,7 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import Fuse from "fuse.js";
 import { glob } from "glob";
-import { resolveSafePath } from "../tools/fs/safePath.js";
+import { resolveSafePath } from "../shared/safePath.js";
 import {
   markdownDocFrontmatterSchema,
   markdownSnippetFrontmatterSchema,

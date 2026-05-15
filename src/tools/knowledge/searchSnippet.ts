@@ -5,7 +5,8 @@ import { searchSnippetDocumentsWithOptions } from "../../storage/markdownKnowled
 
 export const searchSnippetTool: Tool = {
   name: "search_snippet",
-  description: "Search reusable engineering snippets by query text",
+  description:
+    "Search reusable production-ready code snippets by keyword or topic. Use this when the user asks for a code snippet, implementation example, or pattern (e.g. 'give me jwt code', 'show polly retry', 'how to cache with Redis'). Supports optional filters for framework, version, category, and difficulty. Returns a ranked list of matching snippets — follow up with get_snippet to retrieve the full code.",
   inputSchema: z.object({
     query: z.string().min(2).describe("Snippet search query"),
     framework: z.string().optional().describe("Optional framework filter"),

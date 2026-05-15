@@ -4,6 +4,7 @@ import { textResponse } from "../../shared/response.js";
 import {
   listMarkdownDocNames,
   loadNamedMarkdownDocument,
+  searchSnippetDocumentsWithOptions,
 } from "../../storage/markdownKnowledgeStore.js";
 
 function normalize(value: string): string {
@@ -15,7 +16,8 @@ function normalize(value: string): string {
 
 export const generateSetupTool: Tool = {
   name: "generate_setup",
-  description: "Generate production-ready setup guidance for a technology type",
+  description:
+    "Generate a complete production-ready setup guide for a technology, framework, or stack. Use this when the user asks to 'set up', 'configure', 'bootstrap', or 'get started with' something (e.g. '.net api setup', 'setup jwt', 'configure serilog', 'aspnet web api setup'). The 'type' parameter accepts natural-language setup topics like 'jwt', 'aspnet-api', 'serilog'. Optionally pass a 'framework' like 'dotnet9' to get version-specific guidance.",
   inputSchema: z.object({
     type: z.string().min(2).describe("Setup type, e.g. jwt"),
     framework: z.string().optional().describe("Framework hint, e.g. dotnet9"),
@@ -50,8 +52,29 @@ export const generateSetupTool: Tool = {
     }
 
     const available = await listMarkdownDocNames("content/setups");
-    return textResponse(
-      `No setup found for type='${input.type}'${input.framework ? ` framework='${input.framework}'` : ""}. Available setups: ${available.join(", ") || "none"}`,
-    );
+
+    // Fallback: search snippets for related content rather than dead-ending
+    const snippetResults = await searchSnippetDocumentsWithOptions(input.type, {
+      limit: 5,
+    });
+
+    const lines = [
+      `No dedicated setup guide found for '${input.type}'.`,
+      `Available setup guides: ${available.join(", ") || "none"}`,
+    ];
+
+    if (snippetResults.length) {
+      lines.push(
+        "",
+        "## Related Snippets Found",
+        "The following code snippets may help — use get_snippet to retrieve the full code:",
+        ...snippetResults.map(
+          (r) =>
+            `- **${r.name}**: ${r.title} (confidence: ${r.confidence})`,
+        ),
+      );
+    }
+
+    return textResponse(lines.join("\n"));
   },
 };
