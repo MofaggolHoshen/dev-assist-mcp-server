@@ -74,24 +74,13 @@ npx -y @mofaggolhoshen/dev-assist-mcp
 
 ## MCP Tools
 
-### Knowledge Tools (PRD-aligned)
-
-| Tool | Purpose |
-|---|---|
-| search_snippet | Search reusable engineering snippets with optional filters |
-| get_snippet | Retrieve a detailed snippet by name |
-| get_template | Return complete implementation templates |
-| explain_concept | Explain engineering concepts with practical guidance |
-| generate_setup | Generate production-ready setup guidance |
-
-### Utility Tools
-
-| Tool | Purpose |
-|---|---|
-| list_files | List files under a project path |
-| read_file | Read a text file from project scope |
-| search_code | Search keyword matches in project text files |
-| analyze_project | Detect language, framework, architecture, and container hints |
+| Tool            | Purpose                                                    |
+| --------------- | ---------------------------------------------------------- |
+| search_snippet  | Search reusable engineering snippets with optional filters |
+| get_snippet     | Retrieve a detailed snippet by name                        |
+| get_template    | Return complete implementation templates                   |
+| explain_concept | Explain engineering concepts with practical guidance       |
+| generate_setup  | Generate production-ready setup guidance                   |
 
 ## Example Prompts
 
