@@ -69,8 +69,7 @@ export const generateSetupTool: Tool = {
         "## Related Snippets Found",
         "The following code snippets may help — use get_snippet to retrieve the full code:",
         ...snippetResults.map(
-          (r) =>
-            `- **${r.name}**: ${r.title} (confidence: ${r.confidence})`,
+          (r) => `- **${r.name}**: ${r.title} (confidence: ${r.confidence})`,
         ),
       );
     }
